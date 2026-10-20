@@ -24,7 +24,7 @@ pages = {
 }
 
 with st.sidebar:
-    st.caption("© 2026 IKET | Version 1.0.2")
+    st.caption("v1.0.2")
 
 pg = st.navigation(pages)
 pg.run()
