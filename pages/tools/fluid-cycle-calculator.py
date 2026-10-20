@@ -71,7 +71,7 @@ with col3:
         hot_gas_temp = None
 
 # more sliders
-massflow = st.slider(r"Massenstrom ($\frac{Kg}{h}$)", 5, 300, 150, step=5)
+massflow = st.slider(r"Massenstrom ($\frac{kg}{h}$)", 5, 300, 150, step=5)
 
 # do calculation for plots and more data
 plot_data, more_data = logph.calc_cycle_data(p_high, p_low, subcooling, superheat, fluid, massflow, eta_s, hot_gas_temp)
