@@ -3,6 +3,9 @@ import pandas as pd
 import plotly.graph_objects as go
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
+###########################
+# UI
+###########################
 st.title("CSV Plotter")
 
 st.markdown(

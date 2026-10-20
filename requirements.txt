@@ -2,3 +2,6 @@ streamlit
 fluprodia
 plotly
 matplotlib
+pandas
+numpy
+coolprop

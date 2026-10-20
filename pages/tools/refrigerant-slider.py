@@ -2,6 +2,9 @@ import streamlit as st
 from lib import logph
 from CoolProp.CoolProp import PropsSI
 
+###########################
+# constants, functions, etc
+###########################
 P_ATM = 1.0  # bar
 
 # set init values
@@ -71,7 +74,9 @@ def update_with_pressure_rel():
         st.session_state.error = f"Ungültige Druckeingaben ({err})"
 
 
-# title
+###########################
+# UI
+###########################
 st.title("Kältemittelschieber")
 
 # dropdown

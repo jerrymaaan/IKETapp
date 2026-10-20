@@ -1,5 +1,8 @@
 import streamlit as st
 
+###########################
+# UI
+###########################
 st.title('Institute')
 
 st.divider()

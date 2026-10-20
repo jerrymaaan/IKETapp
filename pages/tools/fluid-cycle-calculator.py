@@ -1,6 +1,9 @@
 import streamlit as st
-from lib import logph
+from lib import logph, calc_cp
 
+###########################
+# constants, functions, etc
+###########################
 FLUID_SLIDER_SETTINGS = {
     "R290": {
         "p_min": 1,
@@ -34,7 +37,9 @@ FLUID_SLIDER_SETTINGS = {
     },
 }
 
-# title
+###########################
+# UI
+###########################
 st.title("Kältekreislauf-Rechner")
 
 # dropdown
@@ -63,7 +68,7 @@ with col4:
     use_hg = st.toggle("Stattdessen Heißgas Temperatur verwenden")
 with col3:
     if use_hg:
-        hg_pre = logph.precalculate_hg(p_high, p_low, superheat, fluid)
+        hg_pre = calc_cp.precalculate_hg(p_high, p_low, superheat, fluid)
         hot_gas_temp = st.slider("Heißgas Temperatur (°C)", hg_pre, hg_pre + 50, hg_pre)
         eta_s = None
     else:
@@ -74,7 +79,7 @@ with col3:
 massflow = st.slider(r"Massenstrom ($\frac{kg}{h}$)", 5, 300, 150, step=5)
 
 # do calculation for plots and more data
-plot_data, more_data = logph.calc_cycle_data(p_high, p_low, subcooling, superheat, fluid, massflow, eta_s, hot_gas_temp)
+plot_data, calc_data = calc_cp.calc_cycle_data(p_high, p_low, subcooling, superheat, fluid, massflow, eta_s, hot_gas_temp)
 
 # plot window and spinner
 st.title(f'Log(p)-h-Diagramm für {fluid}')
@@ -94,25 +99,25 @@ st.title(f'Ergebnisse für {fluid}')
 
 col5, col6 = st.columns(2)
 with col5:
-    st.write('$T_0$ (Verdampfungstemperatur) =', round(more_data["t_0"], 2), '°C')
+    st.write('Verdampfungstemperatur $T_0$ =', round(calc_data["t_0"], 2), '°C')
 with col6:
-    st.write('$T_C$ (Verflüssigungstemperatur) =', round(more_data["t_c"], 2), '°C')
+    st.write('Verflüssigungstemperatur $T_C$ =', round(calc_data["t_c"], 2), '°C')
 
-st.write('Verdichterleistung = ', round(more_data["p_compressor"], 2), 'kW')
+st.write('Verdichterleistung = ', round(calc_data["p_compressor"], 2), 'kW')
 col7, col8 = st.columns(2)
 with col7:
-    st.write('Kälteleistung = ', round(more_data["q_evaporation"], 2), 'kW')
+    st.write('Kälteleistung = ', round(calc_data["q_evaporation"], 2), 'kW')
 with col8:
-    st.write('Wärmeleistung = ', round(more_data["q_condensing"], 2), 'kW')
+    st.write('Wärmeleistung = ', round(calc_data["q_condensing"], 2), 'kW')
 
 col9, col10 = st.columns(2)
 with col9:
-    st.write('EER = ', round(more_data["eer"], 2))
+    st.write('EER = ', round(calc_data["eer"], 2))
 with col10:
-    st.write('COP = ', round(more_data["cop"], 2))
+    st.write('COP = ', round(calc_data["cop"], 2))
 
 with st.expander("Weitere Ergebnisse"):
-    st.write(r"$\Delta h_0$ =", round(more_data["delta_h_0"], 2), r"$\frac{kJ}{kg}$")
-    st.write(r"$\Delta h_C$ =", round(more_data["delta_h_c"], 2), r"$\frac{kJ}{kg}$")
-    st.write("Heißgastemperatur =", round(more_data["hot_gas_temp"], 2), "°C")
-    st.write(r"Isentroper Wirkungsgrad $\eta_s$ =", round(more_data["eta_s"], 2))
+    st.write(r"$\Delta h_0$ =", round(calc_data["delta_h_0"], 2), r"$\frac{kJ}{kg}$")
+    st.write(r"$\Delta h_C$ =", round(calc_data["delta_h_c"], 2), r"$\frac{kJ}{kg}$")
+    st.write("Heißgastemperatur =", round(calc_data["hot_gas_temp"], 2), "°C")
+    st.write(r"Isentroper Wirkungsgrad $\eta_s$ =", round(calc_data["eta_s"], 2))
